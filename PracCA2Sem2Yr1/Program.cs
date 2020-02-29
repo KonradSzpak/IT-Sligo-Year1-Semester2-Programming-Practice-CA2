@@ -19,20 +19,50 @@ namespace CA2Prac
             double totalMarks = 0; //total marks pool
             double average = 0; //average
             int i = 0; //loop
-            double mark; //mark
-
+            double mark=0; //mark
+            bool isValid;
 
 
             while (i == 0) //just looping 
             {
+                do
+                {
+                    try
+                    {
+                        isValid = true;
+                        mark = GetMark();
+                    }
 
-                mark = GetMark(); //calls method and gets mark
+                    catch (ArithmeticException error)
+                    {
+                        Console.WriteLine(error.Message);
+                        isValid = false;
+                    }
+
+                    catch (FormatException error)
+                    {
+                        Console.WriteLine("\n{0}\n", error.Message);
+                        isValid = false;
+                    }
+
+                    catch (Exception error)
+                    {
+                        Console.WriteLine("\n{0}\n", error.Message);
+                        isValid = false;
+                    }
+                }
+                while (isValid == false);
+
                 if (mark != -999)//checks if -999
                 {
-                    studentAmount++;//if not student ++
-                    DetermainGrade(mark); //callsmethod to determain grade
 
-                    totalMarks = mark + totalMarks;  //adds mark to total pool
+
+                    DetermainGrade(mark); //callsmethod to determain grade
+                    totalMarks = mark + totalMarks;
+                    studentAmount++;//if not student ++
+
+
+                    //adds mark to total pool
                 }
                 else  //else breaks
                     break;
@@ -49,10 +79,12 @@ namespace CA2Prac
         static double GetMark()//inputs mark
         {
             double mark;
-            Console.WriteLine("Enter mark: ");
+            Console.Write("Enter mark: ");
             mark = double.Parse(Console.ReadLine());
-
-            return mark;
+            if (mark == -999 || mark >= 0 && mark <= 100)
+                return mark;
+            else
+                throw new Exception("Number must be between 0 and 100");
         }
 
 
@@ -62,17 +94,19 @@ namespace CA2Prac
         static void DetermainGrade(double mark)//determains what grade student gets
         {
             if (mark < 40)
-                grades[0] = grades[0] + 1;
-            else if (mark > 39 && mark < 50)
-                grades[1] = grades[1] + 1;
-            else if (mark > 49 && mark < 60)
-                grades[2] = grades[2] + 1;
-            else if (mark > 59 && mark < 70)
-                grades[3] = grades[3] + 1;
-            else if (mark > 69 && mark < 80)
-                grades[4] = grades[4] + 1;
-            else
                 grades[5] = grades[5] + 1;
+            else if (mark > 39 && mark < 50)
+                grades[4] = grades[4] + 1;
+            else if (mark > 49 && mark < 60)
+                grades[3] = grades[3] + 1;
+            else if (mark > 59 && mark < 70)
+                grades[2] = grades[2] + 1;
+            else if (mark > 69 && mark < 80)
+                grades[1] = grades[1] + 1;
+            else
+                grades[0] = grades[0] + 1;
+            
+
         }
 
 
